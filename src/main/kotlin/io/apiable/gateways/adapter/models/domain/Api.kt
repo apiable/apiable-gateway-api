@@ -1,5 +1,9 @@
 package io.apiable.gateways.adapter.models.domain
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import io.apiable.gateways.adapter.models.conf.GatewayType
+
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -21,8 +25,46 @@ package io.apiable.gateways.adapter.models.domain
  * @property integrationId
  * @constructor Create empty Api
  */
-data class Api(
-    val name: String,
-    val url: String,
-    val integrationId: String? = null
+@JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
+@JsonSubTypes(
+    JsonSubTypes.Type(value= AmazonApi::class, name="AMAZON"),
+    JsonSubTypes.Type(value= KongApi::class, name="KONG"),
+    JsonSubTypes.Type(value= AzureApi::class, name="AZURE"),
+    JsonSubTypes.Type(value= ApigeeApi::class, name="APIGEE")
 )
+interface Api{
+    var name: String
+    var url: String
+    val integrationId: String
+    var type: GatewayType
+}
+
+class AzureApi(
+    override var type: GatewayType = GatewayType.AZURE,
+    override var name: String,
+    override var url: String,
+    override var integrationId: String,
+) : Api
+
+class AmazonApi(
+    override var type: GatewayType = GatewayType.AMAZON,
+    override var name: String,
+    override var url: String,
+    override var integrationId: String,
+    val stage: String,
+    var environmentId: String? = null
+) : Api
+
+class KongApi(
+    override var type: GatewayType = GatewayType.KONG,
+    override var name: String,
+    override var url: String,
+    override var integrationId: String,
+) : Api
+
+class ApigeeApi(
+    override var type: GatewayType = GatewayType.APIGEE,
+    override var name: String,
+    override var url: String,
+    override var integrationId: String,
+) : Api

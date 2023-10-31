@@ -16,5 +16,5 @@ package io.apiable.gateways.adapter.models.conf
  */
 
 enum class GatewayType {
-    KONG, AMAZON
+    KONG, AMAZON, AZURE, APIGEE
 }
