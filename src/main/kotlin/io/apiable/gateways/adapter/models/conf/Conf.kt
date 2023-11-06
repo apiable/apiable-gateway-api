@@ -20,17 +20,24 @@ import com.fasterxml.jackson.annotation.*
 @JsonSubTypes(
     JsonSubTypes.Type(value=AmazonBasicConf::class, name="AMAZON_BASIC"),
     JsonSubTypes.Type(value=AmazonRoleArnConf::class, name="AMAZON_ROLE_ARN"),
-    JsonSubTypes.Type(value=KongBasicConf::class, name="KONG_BASIC")
+    JsonSubTypes.Type(value=KongBasicConf::class, name="KONG_BASIC"),
+    JsonSubTypes.Type(value=ApigeeBasicConf::class, name="APIGEE_BASIC")
 )
 interface Conf: java.io.Serializable{
     var type: GatewayConnectionType
 }
 
-class AmazonBasicConf(
+data class AmazonBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_BASIC,
     val key: String,
     val secret: String,
     val region: String,
+) : Conf
+
+data class ApigeeBasicConf(
+    override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_BASIC,
+    val jsonkey: String,
+    val organization: String
 ) : Conf
 
 /*
@@ -48,13 +55,13 @@ class AmazonBasicConf(
  *
  * @constructor Create empty Amazon role arn conf
  */
-class AmazonRoleArnConf(
+data class AmazonRoleArnConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_ROLE_ARN,
     val roleArn: String, // assume role arn
     val region: String,
 ) : Conf
 
-class AzureBasicConf(
+data class AzureBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AZURE_BASIC,
     val key: String,
     val secret: String,
@@ -62,7 +69,7 @@ class AzureBasicConf(
     val tenantid: String,
 ) : Conf
 
-class KongBasicConf(
+data class KongBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.KONG_BASIC,
     val key: String,
     var url: String

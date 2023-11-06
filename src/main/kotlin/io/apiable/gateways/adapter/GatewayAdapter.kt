@@ -38,7 +38,7 @@ interface GatewayAdapter {
      *      response: {id, name, host, protocol, port, created, updated}
      *    Azure: GET https://management.azure.com/subscriptions/${conf.subscriptionid}/providers/Microsoft.ApiManagement/service?api-version=${conf.version}"
      * */
-    fun listApis(conf: Conf, serviceid: String): List<Api>
+    fun listApis(conf: Conf, service: Service): List<Api>
 
     /**
      * Update Plan on a Gateway

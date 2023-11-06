@@ -30,7 +30,8 @@ import io.apiable.gateways.adapter.models.conf.GatewayType
 @JsonSubTypes(
     JsonSubTypes.Type(value= AmazonService::class, name="AMAZON"),
     JsonSubTypes.Type(value= KongService::class, name="KONG"),
-    JsonSubTypes.Type(value= AzureService::class, name="AZURE")
+    JsonSubTypes.Type(value= AzureService::class, name="AZURE"),
+    JsonSubTypes.Type(value= ApigeeService::class, name="APIGEE")
 )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 interface Service{
@@ -41,7 +42,7 @@ interface Service{
 }
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class AmazonService(
+data class AmazonService(
     override var type: GatewayType = GatewayType.AMAZON,
     override var name: String,
     override var url: String,
@@ -52,7 +53,7 @@ class AmazonService(
 ) : Service
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class AzureService(
+data class AzureService(
     override var type: GatewayType = GatewayType.AZURE,
     override var name: String,
     override var url: String,
@@ -61,7 +62,7 @@ class AzureService(
 ) : Service
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class KongService(
+data class KongService(
     override var type: GatewayType = GatewayType.KONG,
     override var name: String,
     override var url: String,
@@ -71,10 +72,12 @@ class KongService(
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class ApigeeService(
+data class ApigeeService(
     override var type: GatewayType = GatewayType.APIGEE,
     override var name: String,
     override var url: String,
     override var apis: List<Api>? = null,
     val integrationId: String,
+    var environment: String,
+    var revision: String
 ) : Service

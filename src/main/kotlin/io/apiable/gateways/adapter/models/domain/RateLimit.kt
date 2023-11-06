@@ -27,7 +27,7 @@ interface RateLimit{
     var type: GatewayType
 }
 
-class AmazonRateLimit(
+data class AmazonRateLimit(
     override var type: GatewayType = GatewayType.AMAZON,
     var quoteLimit: Int? = null,
     var quotePeriod: AmazonApiLimitQuoteUnit? = null,
@@ -36,7 +36,7 @@ class AmazonRateLimit(
 ) : RateLimit
 
 
-class KongRateLimit(
+data class KongRateLimit(
     override var type: GatewayType = GatewayType.KONG,
     val second: Long? = null,
     val hour: Long? = null,
@@ -47,7 +47,7 @@ class KongRateLimit(
 ) : RateLimit
 
 
-class AzureRateLimit(
+data class AzureRateLimit(
     //https://learn.microsoft.com/en-gb/azure/api-management/rate-limit-by-key-policy
     override var type: GatewayType = GatewayType.AZURE,
     val rateLimitCalls: Long,
@@ -63,9 +63,18 @@ class AzureRateLimit(
     val quotaCounterKey: String = "@(context.Subscription?.Key ?? \"anonymous\")" // "@(context.Request.IpAddress)"
 ) : RateLimit
 
-class ApigeeRateLimit(
+// https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct§
+data class ApigeeRateLimit(
     override var type: GatewayType = GatewayType.APIGEE,
+    val quota: Long,
+    val quotaInterval: Long,
+    val quotaTimeUnit: ApigeeApiLimitQuoteUnit
 ) : RateLimit
+
+// https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct
+enum class ApigeeApiLimitQuoteUnit{
+    minute, hour, day, month
+}
 
 enum class AmazonApiLimitQuoteUnit{
     WEEK, MONTH, DAY

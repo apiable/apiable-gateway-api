@@ -39,14 +39,14 @@ interface Api{
     var type: GatewayType
 }
 
-class AzureApi(
+data class AzureApi(
     override var type: GatewayType = GatewayType.AZURE,
     override var name: String,
     override var url: String,
     override var integrationId: String,
 ) : Api
 
-class AmazonApi(
+data class AmazonApi(
     override var type: GatewayType = GatewayType.AMAZON,
     override var name: String,
     override var url: String,
@@ -55,16 +55,18 @@ class AmazonApi(
     var environmentId: String? = null
 ) : Api
 
-class KongApi(
+data class KongApi(
     override var type: GatewayType = GatewayType.KONG,
     override var name: String,
     override var url: String,
     override var integrationId: String,
 ) : Api
 
-class ApigeeApi(
+data class ApigeeApi(
     override var type: GatewayType = GatewayType.APIGEE,
     override var name: String,
     override var url: String,
     override var integrationId: String,
+    var environment: String,
+    var revision: String
 ) : Api
