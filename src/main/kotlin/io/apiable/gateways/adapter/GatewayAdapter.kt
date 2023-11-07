@@ -135,7 +135,7 @@ interface GatewayAdapter {
      *       PUT https://management.azure.com$url/subscriptions/${subscription.id}?api-version=${conf.version}&appType=portal
      *
      * */
-    fun createKey(conf: Conf, subscription: Subscription, key: String? = null, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): String
+    fun createKey(conf: Conf, subscription: Subscription, key: String? = null, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): Subscription
 
     /**
      * Read the key
@@ -155,7 +155,7 @@ interface GatewayAdapter {
      *    Kong: DELETE ${conf.url}/consumers/$username
      *    Azure: DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}"
      * */
-    fun revokeKey(conf: Conf, key: String, clientIdOverride: String? = null, clientSecretOverride: String? = null)
+    fun revokeKey(conf: Conf, subscription: Subscription, clientIdOverride: String? = null, clientSecretOverride: String? = null)
 
     /**
      * Revoke the Key
@@ -180,7 +180,7 @@ interface GatewayAdapter {
      *       DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}
      *       PUT https://management.azure.com$url/subscriptions/${subscription.id}?api-version=${conf.version}&appType=portal
      * */
-    fun refreshKey(conf: Conf, key: String, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): String
+    fun refreshKey(conf: Conf, subscription: Subscription, key: String? = null, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): Subscription
 
     /**
      * Creates a Client on a Gateway
@@ -195,7 +195,7 @@ interface GatewayAdapter {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun createClient(conf: Conf, grantType: GrantType, redirectUris: List<String>? = null): Client
+    fun createClient(conf: Conf, subscription: Subscription, grantType: GrantType, redirectUris: List<String>? = null): Subscription
 
     /**
      * Updates a Client on a Gateway
@@ -209,7 +209,7 @@ interface GatewayAdapter {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun updateClient(conf: Conf, client: Client): Client
+    fun updateClient(conf: Conf, subscription: Subscription): Subscription
 
     /**
      * Updates a Client on a Gateway
@@ -221,7 +221,7 @@ interface GatewayAdapter {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun deleteClient(conf: Conf, client: Client)
+    fun deleteClient(conf: Conf, subscription: Subscription)
 }
 
 

@@ -15,6 +15,27 @@ package io.apiable.gateways.adapter.models.conf
  *
  */
 import com.fasterxml.jackson.annotation.*
+import io.apiable.gateways.adapter.models.domain.Service
+import java.util.UUID
+
+/*
+Auth Type description
+Level 0 - Basic Auth - API Key
+Level 1 - Intermediate - Server to Server - Pre-generated Token
+Level 1 - Intermediate - Server to Server - OAuth 2.0: Client Credentials
+Level 2 - Advanced - Mobile and Web Client - OAuth 2.0: Code Flow
+Level 3 - Evolved - Mobile and Web Client - Centralized Claims
+*/
+enum class AuthType {
+    BASIC_API_KEY, INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW, EVOLVED_CENTRALIZED_CLAIMS
+}
+enum class AuthServerType {
+    APIABLE, NATIVE
+}
+data class Authz (
+    val server: AuthServerType ,
+    val types: List<AuthType>,
+)
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes(
@@ -25,17 +46,18 @@ import com.fasterxml.jackson.annotation.*
 )
 interface Conf: java.io.Serializable{
     var type: GatewayConnectionType
+    var authz: Authz
 }
 
 data class AmazonBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_BASIC,
-    val key: String,
-    val secret: String,
-    val region: String,
+    override var authz: Authz,
+    val region: String
 ) : Conf
 
 data class ApigeeBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_BASIC,
+    override var authz: Authz,
     val jsonkey: String,
     val organization: String
 ) : Conf
@@ -57,12 +79,14 @@ data class ApigeeBasicConf(
  */
 data class AmazonRoleArnConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_ROLE_ARN,
+    override var authz: Authz,
     val roleArn: String, // assume role arn
     val region: String,
 ) : Conf
 
 data class AzureBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.AZURE_BASIC,
+    override var authz: Authz,
     val key: String,
     val secret: String,
     val subscriptionid: String,
@@ -71,6 +95,7 @@ data class AzureBasicConf(
 
 data class KongBasicConf(
     override var type: GatewayConnectionType = GatewayConnectionType.KONG_BASIC,
+    override var authz: Authz,
     val key: String,
     var url: String
 ) : Conf
