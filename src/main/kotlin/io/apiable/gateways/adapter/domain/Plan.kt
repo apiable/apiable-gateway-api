@@ -1,4 +1,8 @@
-package io.apiable.gateways.adapter.models.domain
+package io.apiable.gateways.adapter.domain
+
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -13,8 +17,15 @@ package io.apiable.gateways.adapter.models.domain
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-import com.fasterxml.jackson.annotation.*
-import io.apiable.gateways.adapter.models.conf.GatewayType
+
+
+
+data class Plan(
+    val id: String,
+    val apis: List<Api>,
+    val rateLimit: RateLimit? = null,
+    val integrationId: String? = null
+)
 
 @JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes(
@@ -70,6 +81,8 @@ data class ApigeeRateLimit(
     val quotaInterval: Long,
     val quotaTimeUnit: ApigeeApiLimitQuoteUnit
 ) : RateLimit
+
+data class Usage(val used: Number, val total: Number, val period: String)
 
 // https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct
 enum class ApigeeApiLimitQuoteUnit{

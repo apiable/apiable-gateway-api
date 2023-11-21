@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.models.conf
+package io.apiable.gateways.adapter.domain
 
 /**
  * Apiable Oy
@@ -14,9 +14,17 @@ package io.apiable.gateways.adapter.models.conf
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-import com.fasterxml.jackson.annotation.*
-import io.apiable.gateways.adapter.models.domain.Service
-import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
+
+enum class GatewayType {
+    KONG, AMAZON, AZURE, APIGEE
+}
+
+enum class GatewayConnectionType {
+    KONG_BASIC, AMAZON_BASIC, AZURE_BASIC, AMAZON_ROLE_ARN, APIGEE_JSON_KEY
+}
 
 /*
 Auth Type description
@@ -42,7 +50,8 @@ data class Authz (
     JsonSubTypes.Type(value=AmazonBasicConf::class, name="AMAZON_BASIC"),
     JsonSubTypes.Type(value=AmazonRoleArnConf::class, name="AMAZON_ROLE_ARN"),
     JsonSubTypes.Type(value=KongBasicConf::class, name="KONG_BASIC"),
-    JsonSubTypes.Type(value=ApigeeBasicConf::class, name="APIGEE_BASIC")
+    JsonSubTypes.Type(value=AzureBasicConf::class, name="APIGEE_JSON_KEY"),
+    JsonSubTypes.Type(value=ApigeeJsonKeyConf::class, name="AZURE_BASIC")
 )
 interface Conf: java.io.Serializable{
     var type: GatewayConnectionType
@@ -55,8 +64,8 @@ data class AmazonBasicConf(
     val region: String
 ) : Conf
 
-data class ApigeeBasicConf(
-    override var type: GatewayConnectionType = GatewayConnectionType.AMAZON_BASIC,
+data class ApigeeJsonKeyConf(
+    override var type: GatewayConnectionType = GatewayConnectionType.APIGEE_JSON_KEY,
     override var authz: Authz,
     val jsonkey: String,
     val organization: String

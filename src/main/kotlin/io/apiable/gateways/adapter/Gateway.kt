@@ -1,7 +1,6 @@
 package io.apiable.gateways.adapter
 
-import io.apiable.gateways.adapter.models.conf.Conf
-import io.apiable.gateways.adapter.models.domain.*
+import io.apiable.gateways.adapter.domain.*
 
 /**
  * Apiable Oy
@@ -18,7 +17,19 @@ import io.apiable.gateways.adapter.models.domain.*
  *
  */
 
-interface GatewayAdapter {
+interface ApiGateway {
+
+    /**
+     * Ping the Gateway
+     *
+     * Callout to:
+     *    AWS: java-client: listApis
+     *    Kong: GET ${conf.url}/services
+     *      response: {id, name, host, protocol, port, created, updated}
+     *    Azure: GET https://management.azure.com/subscriptions/${conf.subscriptionid}/providers/Microsoft.ApiManagement/service?api-version=${conf.version}"
+     * */
+    fun ping(conf: Conf): Boolean
+
     /**
      * List services of the Gateway
      *
@@ -41,6 +52,20 @@ interface GatewayAdapter {
     fun listApis(conf: Conf, service: Service): List<Api>
 
     /**
+     * Create Plan on a Gateway
+     *
+     * Callout to:
+     *    AWS: java-client: createUsagePlan
+     *    Kong: POST ${conf.url}/services/${api.name}/plugins:  {config: {allow: ["$planId"]}}
+     *    Azure:
+     *       PUT https://management.azure.com${plan.integrationId}?api-version=${conf.version}
+     *       DELETE https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
+     *       PUT https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
+     *       PUT https://management.azure.com${plan.integrationId}/policies/policy?api-version=${conf.version}
+     * */
+    fun createPlan(conf: Conf, plan: Plan): Plan
+
+    /**
      * Update Plan on a Gateway
      *
      * Callout to:
@@ -60,20 +85,6 @@ interface GatewayAdapter {
     fun updatePlan(conf: Conf, plan: Plan): Plan
 
     /**
-     * Create Plan on a Gateway
-     *
-     * Callout to:
-     *    AWS: java-client: createUsagePlan
-     *    Kong: POST ${conf.url}/services/${api.name}/plugins:  {config: {allow: ["$planId"]}}
-     *    Azure:
-     *       PUT https://management.azure.com${plan.integrationId}?api-version=${conf.version}
-     *       DELETE https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
-     *       PUT https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
-     *       PUT https://management.azure.com${plan.integrationId}/policies/policy?api-version=${conf.version}
-     * */
-    fun createPlan(conf: Conf, plan: Plan): Plan
-
-    /**
      * Update Plan on a Gateway
      *
      * Callout to:
@@ -84,17 +95,6 @@ interface GatewayAdapter {
     fun deletePlan(conf: Conf, plan: Plan)
 
     /**
-     * Ping the Gateway
-     *
-     * Callout to:
-     *    AWS: java-client: listApis
-     *    Kong: GET ${conf.url}/services
-     *      response: {id, name, host, protocol, port, created, updated}
-     *    Azure: GET https://management.azure.com/subscriptions/${conf.subscriptionid}/providers/Microsoft.ApiManagement/service?api-version=${conf.version}"
-     * */
-    fun ping(conf: Conf): Boolean
-
-    /**
      * Get Documentation for API
      *
      * Callout to:
@@ -102,7 +102,7 @@ interface GatewayAdapter {
      *    Kong: tbd
      *    Azure: tbd
      * */
-    fun getDocumentation(conf: Conf, id:String, version:String) : String
+    fun getPlanDocumentation(conf: Conf, id:String, version:String) : String
 
     /**
      * Get Usage for Subscription/Key
@@ -112,10 +112,15 @@ interface GatewayAdapter {
      *    Kong: not supported, client gets the usage withing the headers after every call
      *    Azure: tbd
      * */
-    fun getApiKeyUsage(conf: Conf, subscription: Subscription): ApiKeyUsage
+    fun getUsageByApikey(conf: Conf, keyId: String): Usage
 
+}
+
+interface AuthGateway {
     /**
      * Create a Key
+     *
+     * AuthType.BASIC_API_KEY
      * Callout to:
      *    AWS: java-client: createKeyForUsagePlan
      *    Kong:
@@ -134,34 +139,26 @@ interface GatewayAdapter {
      *    Azure:
      *       PUT https://management.azure.com$url/subscriptions/${subscription.id}?api-version=${conf.version}&appType=portal
      *
+     *
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * Callout to:
+     *    AWS: not supported: Can be combined with the Apiable Auth Platform - Curity
+     *    Kong:
+     *       POST ${conf.url}/consumers
+     *       POST ${conf.url}/consumers/$username/oauth2/
+     *       POST ${conf.url}/consumers/$username/acls
+     *       GET ${conf.url}/services/${api.name}/routes
+     *    Azure:
+     *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun createKey(conf: Conf, subscription: Subscription, key: String? = null, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): Subscription
 
+    fun createAuth(conf: Conf, auth: Auth, plans: List<String>): Auth
     /**
-     * Read the key
+     *
+     * AuthType.BASIC_API_KEY
      *
      * Callout to:
-     *    AWS: java-client: getKeyForSubscription
-     *    Kong: tbd
-     *    Azure: tbd
-     * */
-    fun readKey(conf: Conf, subscription: Subscription): String
-
-    /**
-     * Revoke the Key
-     *
-     * Callout to:
-     *    AWS: java-client: deleteKey
-     *    Kong: DELETE ${conf.url}/consumers/$username
-     *    Azure: DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}"
-     * */
-    fun revokeKey(conf: Conf, subscription: Subscription, clientIdOverride: String? = null, clientSecretOverride: String? = null)
-
-    /**
-     * Revoke the Key
-     *
-     * Callout to:
-     *    AWS: java-client: deleteKey
+     *    AWS: java-client: deleteKey/createKey
      *    Kong:
      *       DELETE ${conf.url}/consumers/$username
      *       POST ${conf.url}/consumers:
@@ -179,25 +176,11 @@ interface GatewayAdapter {
      *    Azure:
      *       DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}
      *       PUT https://management.azure.com$url/subscriptions/${subscription.id}?api-version=${conf.version}&appType=portal
-     * */
-    fun refreshKey(conf: Conf, subscription: Subscription, key: String? = null, clientIdOverride: String? = null, clientSecretOverride: String? = null, appendToToken: Map<String,String>? = null): Subscription
-
-    /**
-     * Creates a Client on a Gateway
      *
-     * Callout to:
-     *    AWS: not supported: Can be combined with the Apiable Auth Platform - Curity
-     *    Kong:
-     *       POST ${conf.url}/consumers
-     *       POST ${conf.url}/consumers/$username/oauth2/
-     *       POST ${conf.url}/consumers/$username/acls
-     *       GET ${conf.url}/services/${api.name}/routes
-     *    Azure:
-     *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
-     * */
-    fun createClient(conf: Conf, subscription: Subscription, grantType: GrantType, redirectUris: List<String>? = null): Subscription
-
-    /**
+     *
+     *
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     *
      * Updates a Client on a Gateway
      *
      * Callout to:
@@ -209,9 +192,19 @@ interface GatewayAdapter {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun updateClient(conf: Conf, subscription: Subscription): Subscription
+    fun refreshAuth(conf: Conf, auth: Auth): Auth
+
 
     /**
+     * Revoke the Key
+     * AuthType.BASIC_API_KEY
+     *
+     * Callout to:
+     *    AWS: java-client: deleteKey
+     *    Kong: DELETE ${conf.url}/consumers/$username
+     *    Azure: DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}"
+     *
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
      * Updates a Client on a Gateway
      *
      * Callout to:
@@ -221,8 +214,26 @@ interface GatewayAdapter {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun deleteClient(conf: Conf, subscription: Subscription)
+    fun revokeAuth(conf: Conf, auth: Auth)
+
+    /**
+     * Read the key
+     * AuthType.BASIC_API_KEY
+     *
+     * Callout to:
+     *    AWS: java-client: getKeyForSubscription
+     *    Kong: tbd
+     *    Azure: tbd
+     *
+     *
+     *
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * Not implemented yet
+     * */
+    fun readAuth(conf: Conf, auth: Auth): Auth
 }
+
+interface Gateway: ApiGateway, AuthGateway
 
 
 

@@ -1,8 +1,7 @@
-package io.apiable.gateways.adapter.models.domain
+package io.apiable.gateways.adapter.domain
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import io.apiable.gateways.adapter.models.conf.AuthType
 
 /**
  * Apiable Oy
@@ -19,10 +18,6 @@ import io.apiable.gateways.adapter.models.conf.AuthType
  *
  */
 
-enum class GrantType{
-    CLIENT_CREDENTIAL,AUTH_CODE
-}
-class CalloutExamples(val curl: String)
 @JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes(
     JsonSubTypes.Type(value= AuthBasicApiKey::class, name="BASIC_API_KEY"),
@@ -32,32 +27,41 @@ class CalloutExamples(val curl: String)
 )
 interface Auth: java.io.Serializable{
     var type: AuthType
+    var integrationId: String
 }
 
-class AuthBasicApiKey(
-    override var type: AuthType =AuthType.BASIC_API_KEY,
-    var key: String,
-    var key2: String? = null
+class CalloutExamples(val curl: String)
+
+data class AuthBasicApiKey(
+    override var type: AuthType = AuthType.BASIC_API_KEY,
+    override var integrationId: String,
+    val key: String,
+    val key2: String? = null
 ) : Auth
 
-class AuthIntermediatePreGenerateToken(
+data class AuthIntermediatePreGenerateToken(
     override var type: AuthType = AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN,
-    var token: String
+    override var integrationId: String,
+    val token: String,
+    val appendToToken: Map<String,String>? = null
 ) : Auth
 
 
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/client-credentials-flow?context=linkedin%2Fcontext
-class AuthIntermediateClientCredential(
+data class AuthIntermediateClientCredential(
     override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
+    override var integrationId: String,
     var clientId: String,
     var clientSecret: String,
     var registrationClientUri: String,
+    var redirectUri: String,
     var examples: CalloutExamples? = null
 ) : Auth
 
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fcontext&tabs=HTTPS1
-class AuthAdvancedCodeFlow(
+data class AuthAdvancedCodeFlow(
     override var type: AuthType = AuthType.ADVANCED_CODE_FLOW,
+    override var integrationId: String,
     var clientId: String,
     var clientSecret: String,
     var registrationClientUri: String,
@@ -69,6 +73,6 @@ class AuthAdvancedCodeFlow(
 
 data class Subscription(
     val id: String,
-    var integrationId: String? = null,
+    val integrationId: String? = null,
     var auth: Auth? = null
 )

@@ -1,9 +1,8 @@
-package io.apiable.gateways.adapter.models.domain
+package io.apiable.gateways.adapter.domain
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import io.apiable.gateways.adapter.models.conf.GatewayType
 
 /**
  * Apiable Oy
