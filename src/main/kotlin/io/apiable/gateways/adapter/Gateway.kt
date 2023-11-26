@@ -63,7 +63,7 @@ interface ApiGateway {
      *       PUT https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
      *       PUT https://management.azure.com${plan.integrationId}/policies/policy?api-version=${conf.version}
      * */
-    fun createPlan(conf: Conf, plan: Plan): Plan
+    fun createPlan(conf: Conf, plan: PlanCreate): Plan
 
     /**
      * Update Plan on a Gateway
@@ -102,17 +102,31 @@ interface ApiGateway {
      *    Kong: tbd
      *    Azure: tbd
      * */
-    fun getPlanDocumentation(conf: Conf, id:String, version:String) : String
+    enum class DocumentationType {
+        OPEN_API_3, // API documentation
+    }
+    enum class DocumentationFormat {
+        JSON, // API documentation
+        YAML, // API documentation
+    }
+    fun getPlanDocumentation(conf: Conf,
+                             integrationId:String,
+                             version:String,
+                             type: DocumentationType, // oas30
+                             format: DocumentationFormat // application/json / application/x-yaml
+    ) : String
 
     /**
-     * Get Usage for Subscription/Key
+     * Get § for Subscription/Key
      *
      * Callout to:
      *    AWS: java-client: listTheUsageOfAKey
      *    Kong: not supported, client gets the usage withing the headers after every call
      *    Azure: tbd
      * */
-    fun getUsageByApikey(conf: Conf, keyId: String): Usage
+    fun getPlanUsageForKey(conf: Conf, planIntegrationId: String, keyIntegrationId: String): UsageForKey
+
+    fun getUsageForPlan(conf: Conf, planIntegrationId: String, startDate: String, endDate: String): List<UsageForPlan>
 
 }
 
@@ -152,7 +166,7 @@ interface AuthGateway {
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
 
-    fun createAuth(conf: Conf, auth: Auth, plans: List<String>): Auth
+    fun createAuth(conf: Conf, auth: AuthCreate): Auth
     /**
      *
      * AuthType.BASIC_API_KEY
@@ -192,8 +206,7 @@ interface AuthGateway {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun refreshAuth(conf: Conf, auth: Auth): Auth
-
+    fun updateAuth(conf: Conf, auth: AuthUpdate)
 
     /**
      * Revoke the Key
@@ -214,7 +227,7 @@ interface AuthGateway {
      *    Azure:
      *       not supported yet: Can be combined with the Apiable Auth Platform - Curity
      * */
-    fun revokeAuth(conf: Conf, auth: Auth)
+    fun revokeAuth(conf: Conf, auth: AuthRevoke)
 
     /**
      * Read the key
@@ -230,7 +243,15 @@ interface AuthGateway {
      * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
      * Not implemented yet
      * */
-    fun readAuth(conf: Conf, auth: Auth): Auth
+    fun readAuth(conf: Conf, auth: AuthRead): Auth
+
+
+    fun refreshAuth(conf: Conf, auth: AuthRefresh): Auth {
+        revokeAuth(conf, auth.revoke)
+        return createAuth(conf, auth.create)
+    }
+
+    fun isAuthZApiable(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.APIABLE.name)
 }
 
 interface Gateway: ApiGateway, AuthGateway
