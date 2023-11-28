@@ -1,8 +1,5 @@
 package io.apiable.gateways.adapter.domain
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -17,18 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-
-@JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-@JsonSubTypes(
-    JsonSubTypes.Type(value= AuthBasicApiKey::class, name="BASIC_API_KEY"),
-    JsonSubTypes.Type(value= AuthIntermediatePreGenerateToken::class, name="INTERMEDIATE_PRE_GENERATE_TOKEN"),
-    JsonSubTypes.Type(value= AuthIntermediateClientCredential::class, name="INTERMEDIATE_CLIENT_CREDENTIAL"),
-    JsonSubTypes.Type(value= AuthAdvancedCodeFlow::class, name="ADVANCED_CODE_FLOW")
-)
-interface Auth: java.io.Serializable{
-    var type: AuthType
-    var integrationId: String
-}
+interface Auth: Integratable
 
 interface AuthRead: Auth
 interface AuthCreate: Auth {
@@ -40,34 +26,34 @@ interface AuthUpdate: Auth {
     val attributes: Map<String, Any>
 }
 interface AuthRevoke: Auth
-interface AuthRefresh: java.io.Serializable {
-    val revoke: AuthRevoke
-    val create: AuthCreate
-}
-
+data class AuthRefresh (val revoke: AuthRevoke, val create: AuthCreate)
 interface AuthClientCreate: AuthCreate {
     var appendToToken: Map<String,String>?
 }
 interface AuthClientUpdate: AuthUpdate {
     var appendToToken: Map<String,String>?
+    var examples: CalloutExamples?
+}
+interface AuthClientRevoke: AuthRevoke {
+    var registrationClientUri: String
 }
 
-class CalloutExamples(val curl: String)
+data class CalloutExamples(val curl: String)
 
 data class AuthBasicApiKey(
-    override var type: AuthType = AuthType.BASIC_API_KEY,
+    override var id: String,
     override var integrationId: String,
     val key: String,
     val key2: String? = null
 ) : Auth
 
 data class AuthBasicApiKeyRead(
-    override var type: AuthType = AuthType.BASIC_API_KEY,
-    override var integrationId: String
+    override var integrationId: String,
+    override var id: String = integrationId
 ) : AuthRead
 
 data class AuthBasicApiKeyCreate(
-    override var type: AuthType = AuthType.BASIC_API_KEY,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
@@ -76,24 +62,24 @@ data class AuthBasicApiKeyCreate(
 ) : AuthCreate, AuthUpdate
 
 data class AuthBasicApiKeyRevoke(
-    override var type: AuthType = AuthType.BASIC_API_KEY,
-    override var integrationId: String
+    override var integrationId: String,
+    override var id: String = integrationId
 ) : AuthRevoke
 
 data class AuthIntermediatePreGenerateToken(
-    override var type: AuthType = AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN,
+    override var id: String,
     override var integrationId: String,
     val appendToToken: Map<String,String>? = null,
     val token: String
 ) : Auth
 
 data class AuthIntermediatePreGenerateTokenRead(
-    override var type: AuthType = AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN,
-    override var integrationId: String
+    override var integrationId: String,
+    override var id: String = integrationId
 ) : AuthRead
 
 data class AuthIntermediatePreGenerateTokenCreate(
-    override var type: AuthType = AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
@@ -101,14 +87,14 @@ data class AuthIntermediatePreGenerateTokenCreate(
 ) : AuthCreate, AuthUpdate
 
 data class AuthIntermediatePreGenerateTokenRevoke(
-    override var type: AuthType = AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN,
     override var integrationId: String,
+    override var id: String = integrationId,
     val token: String
 ) : AuthRevoke
 
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/client-credentials-flow?context=linkedin%2Fcontext
 data class AuthIntermediateClientCredential(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
+    override var id: String,
     override var integrationId: String,
     var clientId: String,
     var clientSecret: String,
@@ -119,12 +105,12 @@ data class AuthIntermediateClientCredential(
 ) : Auth
 
 data class AuthIntermediateClientCredentialRead(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
-    override var integrationId: String
+    override var integrationId: String,
+    override var id: String = integrationId
 ) : AuthRead
 
 data class AuthIntermediateClientCredentialCreate(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
@@ -133,25 +119,26 @@ data class AuthIntermediateClientCredentialCreate(
 ) : AuthClientCreate
 
 data class AuthIntermediateClientCredentialUpdate(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String, Any>,
     var clientId: String,
     var redirectUri: String,
     var registrationClientUri: String,
+    override var examples: CalloutExamples? = null,
     override var appendToToken: Map<String,String>? = null,
 ) : AuthClientUpdate
 
 data class AuthIntermediateClientCredentialRevoke(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
     override var integrationId: String,
-    var registrationClientUri: String
-) : AuthRevoke
+    override var id: String = integrationId,
+    override var registrationClientUri: String
+) : AuthClientRevoke
 
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fcontext&tabs=HTTPS1
 data class AuthAdvancedCodeFlow(
-    override var type: AuthType = AuthType.ADVANCED_CODE_FLOW,
+    override var id: String,
     override var integrationId: String,
     var clientId: String,
     var clientSecret: String,
@@ -164,12 +151,12 @@ data class AuthAdvancedCodeFlow(
 ) : Auth
 
 data class AuthAdvancedCodeFlowRead(
-    override var type: AuthType = AuthType.ADVANCED_CODE_FLOW,
-    override var integrationId: String
+    override var integrationId: String,
+    override var id: String = integrationId
 ) : AuthRead
 
 data class AuthAdvancedCodeFlowCreate(
-    override var type: AuthType = AuthType.ADVANCED_CODE_FLOW,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
@@ -180,7 +167,7 @@ data class AuthAdvancedCodeFlowCreate(
 ) : AuthClientCreate
 
 data class AuthAdvancedCodeFlowUpdate(
-    override var type: AuthType = AuthType.ADVANCED_CODE_FLOW,
+    override var id: String,
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String, Any>,
@@ -189,11 +176,15 @@ data class AuthAdvancedCodeFlowUpdate(
     var allowedOrigins: List<String> = emptyList(),
     var registrationClientUri: String,
     val postLogoutRedirectUris: List<String> = emptyList(),
+    override var examples: CalloutExamples? = null,
     override var appendToToken: Map<String,String>? = null
 ) : AuthClientUpdate
 
 data class AuthAdvancedCodeFlowRevoke(
-    override var type: AuthType = AuthType.INTERMEDIATE_CLIENT_CREDENTIAL,
     override var integrationId: String,
-    var registrationClientUri: String
-) : AuthRevoke
+    override var id: String = integrationId,
+    override var registrationClientUri: String
+) : AuthClientRevoke
+
+
+

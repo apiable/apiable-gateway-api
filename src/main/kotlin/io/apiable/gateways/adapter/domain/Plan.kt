@@ -1,8 +1,5 @@
 package io.apiable.gateways.adapter.domain
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -17,16 +14,29 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
+
+
+interface IPlan : Integratable
+
 data class Plan(
-    val id: String,
-    var integrationId: String,
+    override var id: String,
+    override var integrationId: String,
     val apis: List<Api>,
     val rateLimit: RateLimit? = null
-)
+): IPlan
 
 data class PlanCreate(
-    val id: String,
+    override var id: String,
+    override var integrationId: String,
     val apis: List<Api>,
     val rateLimit: RateLimit? = null
-)
+): IPlan
+
+data class PlanUpdate(
+    override var id: String,
+    override var integrationId: String,
+    val rateLimit: RateLimit? = null,
+    val apisToAdd: List<Api>,
+    val apisToDelete: List<Api>
+): IPlan
 

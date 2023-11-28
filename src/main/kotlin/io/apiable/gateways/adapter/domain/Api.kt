@@ -1,8 +1,5 @@
 package io.apiable.gateways.adapter.domain
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -24,48 +21,39 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  * @property integrationId
  * @constructor Create empty Api
  */
-@JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-@JsonSubTypes(
-    JsonSubTypes.Type(value= AmazonApi::class, name="AMAZON"),
-    JsonSubTypes.Type(value= KongApi::class, name="KONG"),
-    JsonSubTypes.Type(value= AzureApi::class, name="AZURE"),
-    JsonSubTypes.Type(value= ApigeeApi::class, name="APIGEE")
-)
-interface Api{
+interface Api : Integratable{
     var name: String
     var url: String
-    val integrationId: String
-    var type: GatewayType
 }
 
 data class AzureApi(
-    override var type: GatewayType = GatewayType.AZURE,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var integrationId: String,
 ) : Api
 
 data class AmazonApi(
-    override var type: GatewayType = GatewayType.AMAZON,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var integrationId: String,
     val stage: String,
     var environmentId: String? = null
 ) : Api
 
 data class KongApi(
-    override var type: GatewayType = GatewayType.KONG,
-    override var name: String,
-    override var url: String,
+    override var id: String,
     override var integrationId: String,
+    override var name: String,
+    override var url: String
 ) : Api
 
 data class ApigeeApi(
-    override var type: GatewayType = GatewayType.APIGEE,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var integrationId: String,
     var environment: String,
     var revision: String
 ) : Api

@@ -1,9 +1,5 @@
 package io.apiable.gateways.adapter.domain
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -25,58 +21,44 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  * @property integrationId
  * @constructor Create empty Api
  */
-@JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-@JsonSubTypes(
-    JsonSubTypes.Type(value= AmazonService::class, name="AMAZON"),
-    JsonSubTypes.Type(value= KongService::class, name="KONG"),
-    JsonSubTypes.Type(value= AzureService::class, name="AZURE"),
-    JsonSubTypes.Type(value= ApigeeService::class, name="APIGEE")
-)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-interface Service{
+interface Service : Integratable {
     var name: String
     var url: String
-    var type: GatewayType
     var apis: List<Api>?
 }
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class AmazonService(
-    override var type: GatewayType = GatewayType.AMAZON,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
     override var apis: List<Api>? = null,
     val stage: String,
-    val integrationId: String,
     var environmentId: String? = null
 ) : Service
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class AzureService(
-    override var type: GatewayType = GatewayType.AZURE,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var apis: List<Api>? = null,
-    val integrationId: String,
+    override var apis: List<Api>? = null
 ) : Service
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class KongService(
-    override var type: GatewayType = GatewayType.KONG,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var apis: List<Api>? = null,
-    val integrationId: String,
+    override var apis: List<Api>? = null
 ) : Service
 
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class ApigeeService(
-    override var type: GatewayType = GatewayType.APIGEE,
+    override var id: String,
+    override var integrationId: String,
     override var name: String,
     override var url: String,
     override var apis: List<Api>? = null,
-    val integrationId: String,
     var environment: String,
     var revision: String
 ) : Service

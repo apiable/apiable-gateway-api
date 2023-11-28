@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 allprojects {
 	group = "io.apiable"
 	version = "0.0.1-SNAPSHOT"
-	java.sourceCompatibility = JavaVersion.VERSION_19
+	java.sourceCompatibility = JavaVersion.VERSION_17
 
 	repositories {
 		mavenLocal()
@@ -28,13 +28,12 @@ allOpen {
 }
 
 dependencies {
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "19"
+		jvmTarget = "17"
 	}
 }
 

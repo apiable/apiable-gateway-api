@@ -82,7 +82,7 @@ interface ApiGateway {
      *       PUT https://management.azure.com${plan.integrationId}/apis/${api.name}?api-version=${conf.version}
      *       PUT https://management.azure.com${plan.integrationId}/policies/policy?api-version=${conf.version}
      * */
-    fun updatePlan(conf: Conf, plan: Plan): Plan
+    fun updatePlan(conf: Conf, plan: PlanUpdate): Plan
 
     /**
      * Update Plan on a Gateway
@@ -252,6 +252,7 @@ interface AuthGateway {
     }
 
     fun isAuthZApiable(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.APIABLE.name)
+    fun isAuthZNative(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.NATIVE.name)
 }
 
 interface Gateway: ApiGateway, AuthGateway
