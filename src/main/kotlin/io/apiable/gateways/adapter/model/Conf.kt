@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.domain
+package io.apiable.gateways.adapter.model
 
 /**
  * Apiable Oy
@@ -14,8 +14,6 @@ package io.apiable.gateways.adapter.domain
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-import java.io.Serializable
-import java.util.*
 
 /*
 Auth Type description
@@ -84,7 +82,7 @@ data class AmazonRoleArnConf(
 data class ApigeeJsonKeyConf(
     override var id: String,
     override var authz: Authz,
-    val jsonkey: String,
+    var jsonkey: String,
     val organization: String,
     override var integrationId: String = id
 ) : Conf

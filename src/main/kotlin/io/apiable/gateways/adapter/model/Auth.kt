@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.domain
+package io.apiable.gateways.adapter.model
 
 /**
  * Apiable Oy
@@ -83,8 +83,8 @@ data class AuthIntermediatePreGenerateTokenCreate(
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
-    val appendToToken: Map<String,String>? = null
-) : AuthCreate, AuthUpdate
+    override var appendToToken: Map<String,String>? = null
+) : AuthClientCreate, AuthUpdate
 
 data class AuthIntermediatePreGenerateTokenRevoke(
     override var integrationId: String,

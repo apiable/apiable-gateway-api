@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.domain
+package io.apiable.gateways.adapter.model
 
 import java.io.Serializable
 

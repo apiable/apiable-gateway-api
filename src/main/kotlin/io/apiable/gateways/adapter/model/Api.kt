@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.domain
+package io.apiable.gateways.adapter.model
 
 /**
  * Apiable Oy
@@ -22,6 +22,7 @@ package io.apiable.gateways.adapter.domain
  * @constructor Create empty Api
  */
 interface Api : Integratable{
+    var serviceIntegrationId: String
     var name: String
     var url: String
 }
@@ -29,6 +30,7 @@ interface Api : Integratable{
 data class AzureApi(
     override var id: String,
     override var integrationId: String,
+    override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
 ) : Api
@@ -36,6 +38,7 @@ data class AzureApi(
 data class AmazonApi(
     override var id: String,
     override var integrationId: String,
+    override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
     val stage: String,
@@ -45,13 +48,15 @@ data class AmazonApi(
 data class KongApi(
     override var id: String,
     override var integrationId: String,
+    override var serviceIntegrationId: String,
     override var name: String,
-    override var url: String
+    override var url: String,
 ) : Api
 
 data class ApigeeApi(
     override var id: String,
     override var integrationId: String,
+    override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
     var environment: String,

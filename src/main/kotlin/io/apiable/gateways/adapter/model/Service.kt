@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter.domain
+package io.apiable.gateways.adapter.model
 
 /**
  * Apiable Oy
@@ -33,7 +33,7 @@ data class AmazonService(
     override var name: String,
     override var url: String,
     override var apis: List<Api>? = null,
-    val stage: String,
+    var stage: String,
     var environmentId: String? = null
 ) : Service
 
