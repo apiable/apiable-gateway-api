@@ -52,6 +52,17 @@ interface ApiGateway {
     fun listApis(conf: Conf, service: Service): List<Api>
 
     /**
+     * List apis of the Gateway
+     *
+     * Callout to:
+     *    AWS: java-client: listStages of listApis
+     *    Kong: GET ${conf.url}/services:
+     *      response: {id, name, host, protocol, port, created, updated}
+     *    Azure: GET https://management.azure.com/subscriptions/${conf.subscriptionid}/providers/Microsoft.ApiManagement/service?api-version=${conf.version}"
+     * */
+    fun listApis(conf: Conf): List<Api>
+
+    /**
      * Create Plan on a Gateway
      *
      * Callout to:

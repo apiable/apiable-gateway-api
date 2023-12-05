@@ -38,7 +38,8 @@ data class Authz (
     val types: List<AuthType>,
 )
 
-interface Conf: Integratable{
+interface Conf {
+    var id: String
     var authz: Authz
 }
 
@@ -51,8 +52,7 @@ data class AmazonBasicConf(
     override var authz: Authz,
     override var region: String,
     var key: String,
-    var secret: String,
-    override var integrationId: String = id
+    var secret: String
 ) : AmazonConf
 
 
@@ -75,32 +75,30 @@ data class AmazonRoleArnConf(
     override var id: String,
     override var authz: Authz,
     override var region: String,
-    val roleArn: String, // assume role arn
-    override var integrationId: String = id,
+    val roleArn: String // assume role arn
 ) : AmazonConf
 
 data class ApigeeJsonKeyConf(
     override var id: String,
     override var authz: Authz,
     var jsonkey: String,
-    val organization: String,
-    override var integrationId: String = id
+    val organization: String
 ) : Conf
 
 data class AzureBasicConf(
     override var id: String,
     override var authz: Authz,
-    var key: String,
+    var clientid: String,
     var secret: String,
     val subscriptionid: String,
     val tenantid: String,
-    override var integrationId: String = id,
+    val serviceid: String,
+    val resourceGroup: String
 ) : Conf
 
 data class KongBasicConf(
     override var id: String,
     override var authz: Authz,
     var key: String,
-    var url: String,
-    override var integrationId: String = id
+    var url: String
 ) : Conf

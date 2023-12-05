@@ -14,10 +14,11 @@ package io.apiable.gateways.adapter.model
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-interface RateLimit : Integratable
+interface RateLimit {
+    var integrationId: String
+}
 
 data class AmazonRateLimit(
-    override var id: String,
     override var integrationId: String,
     var quoteLimit: Int? = null,
     var quotePeriod: AmazonApiLimitQuoteUnit? = null,
@@ -26,7 +27,6 @@ data class AmazonRateLimit(
 ) : RateLimit
 
 data class KongRateLimit(
-    override var id: String,
     override var integrationId: String,
     val second: Long? = null,
     val hour: Long? = null,
@@ -38,7 +38,6 @@ data class KongRateLimit(
 
 data class AzureRateLimit(
     //https://learn.microsoft.com/en-gb/azure/api-management/rate-limit-by-key-policy
-    override var id: String,
     override var integrationId: String,
     val rateLimitCalls: Long,
     val rateLimitRenewalPeriodInSec: Long,
@@ -55,7 +54,6 @@ data class AzureRateLimit(
 
 // https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct§
 data class ApigeeRateLimit(
-    override var id: String,
     override var integrationId: String,
     val quota: Long,
     val quotaInterval: Long,

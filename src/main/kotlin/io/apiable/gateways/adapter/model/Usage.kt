@@ -8,20 +8,22 @@ package io.apiable.gateways.adapter.model
  *
  * This product is the proprietary and sole property of Apiable Oy.
  */
-interface UsageForKey : Integratable
+interface UsageForKey {
+    var integrationId: String
+}
 
 data class AmazonUsageForKey(
-    override var id: String,
     override var integrationId: String,
     val used: Number,
     val total: Number,
     val period: String
 ) : UsageForKey
 
-interface UsageForPlan : Integratable
+interface UsageForPlan {
+    var integrationId: String
+}
 
 data class AmazonUsageForPlan(
-    override var id: String,
     override var integrationId: String,
     var total: Long
 ) : UsageForPlan
