@@ -14,9 +14,8 @@ allprojects {
 }
 
 plugins {
-	val kotlinPlugin = "1.7.10" // https://kotlinlang.org/docs/gradle.html
+	val kotlinPlugin = "1.9.20" // https://kotlinlang.org/docs/gradle.html
 	kotlin("jvm") version kotlinPlugin
-	kotlin("plugin.spring") version kotlinPlugin
 	kotlin("plugin.allopen") version kotlinPlugin
 	kotlin("plugin.serialization") version kotlinPlugin
 	kotlin("kapt") version kotlinPlugin
@@ -29,7 +28,6 @@ allOpen {
 }
 
 dependencies {
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
 }
 
 tasks.withType<KotlinCompile> {

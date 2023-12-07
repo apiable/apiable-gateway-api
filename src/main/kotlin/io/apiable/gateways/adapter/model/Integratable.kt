@@ -1,4 +1,6 @@
-package io.apiable.gateways.adapter.models.domain
+package io.apiable.gateways.adapter.model
+
+import java.io.Serializable
 
 /**
  * Apiable Oy
@@ -10,16 +12,11 @@ package io.apiable.gateways.adapter.models.domain
  * Use, duplication or dissemination is subject to prior written consent of
  * Apiable Oy.
  *
- * Created on 26.04.23
+ * Created on 26.11.23
  * @author: Apiable Geeks <geeks@apiable.io>
  *
  */
-
-
-
-data class Plan(
-    val id: String,
-    val apis: List<Api>,
-    val rateLimit: RateLimit? = null,
-    val integrationId: String? = null
-)
+interface Integratable: Serializable{
+    var id: String
+    var integrationId: String
+}
