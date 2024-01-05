@@ -40,6 +40,9 @@ data class AmazonApi(
     override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
+    val path: String? = null,
+    val pathPart: String? = null,
+    val method: String? = null,
     val stage: String,
     var environmentId: String? = null
 ) : Api
