@@ -21,11 +21,18 @@ package io.apiable.gateways.adapter.model
  * @property integrationId
  * @constructor Create empty Api
  */
+data class Resource(
+    var path: String,
+    var method: String,
+    var integrationId: String
+)
+
 interface Api{
     var integrationId: String
     var serviceIntegrationId: String
     var name: String
     var url: String
+    var resources: List<Resource>?
 }
 
 data class AzureApi(
@@ -33,6 +40,7 @@ data class AzureApi(
     override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
+    override var resources: List<Resource>? = emptyList(),
 ) : Api
 
 data class AmazonApi(
@@ -40,10 +48,8 @@ data class AmazonApi(
     override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
-    val path: String? = null,
-    val pathPart: String? = null,
-    val method: String? = null,
-    val stage: String,
+    override var resources: List<Resource>? = emptyList(),
+    var stage: String,
     var environmentId: String? = null
 ) : Api
 
@@ -52,6 +58,7 @@ data class KongApi(
     override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
+    override var resources: List<Resource>? = emptyList(),
 ) : Api
 
 data class ApigeeApi(
@@ -59,6 +66,7 @@ data class ApigeeApi(
     override var serviceIntegrationId: String,
     override var name: String,
     override var url: String,
+    override var resources: List<Resource>? = emptyList(),
     var environment: String,
     var revision: String
 ) : Api
