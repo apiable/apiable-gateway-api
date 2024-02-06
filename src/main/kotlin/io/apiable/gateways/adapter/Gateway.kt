@@ -51,6 +51,8 @@ interface ApiGateway {
      * */
     fun listApis(conf: Conf, service: Service): List<Api>
 
+    fun listResources(conf: Conf, apiIntegrationId: String): List<Resource>
+
     /**
      * List apis of the Gateway
      *
