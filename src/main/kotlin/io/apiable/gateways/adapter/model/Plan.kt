@@ -22,14 +22,16 @@ data class Plan(
     override var id: String,
     override var integrationId: String,
     val apis: List<Api>,
-    val rateLimit: RateLimit? = null
+    val rateLimit: RateLimit? = null,
+    var enableUsageEvents: Boolean ? = null
 ): IPlan
 
 data class PlanCreate(
     override var id: String,
     override var integrationId: String,
     val apis: List<Api>,
-    val rateLimit: RateLimit? = null
+    val rateLimit: RateLimit? = null,
+    var enableUsageEvents: Boolean ? = null
 ): IPlan
 
 data class PlanUpdate(
@@ -37,6 +39,7 @@ data class PlanUpdate(
     override var integrationId: String,
     val rateLimit: RateLimit? = null,
     val apisToAdd: List<Api>,
-    val apisToDelete: List<Api>
+    val apisToDelete: List<Api>,
+    var enableUsageEvents: Boolean ? = null
 ): IPlan
 
