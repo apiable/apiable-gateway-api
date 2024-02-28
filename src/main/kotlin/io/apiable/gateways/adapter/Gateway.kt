@@ -141,6 +141,12 @@ interface ApiGateway {
 
     fun getUsageForPlan(conf: Conf, planIntegrationId: String, startDate: String, endDate: String): List<UsageForPlan>
 
+    /**
+     * Validate the Plan against the Gateway
+     * @return Map of errors where key is the integration ID and value is the error message.
+     */
+    fun validateExistsOnGateway(conf: Conf, plan: Plan): Map<String,String>
+
 }
 
 interface AuthGateway {
