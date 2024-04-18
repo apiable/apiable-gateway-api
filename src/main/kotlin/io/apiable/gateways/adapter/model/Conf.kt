@@ -31,11 +31,14 @@ enum class AuthType {
     EVOLVED_CENTRALIZED_CLAIMS
 }
 enum class AuthServerType {
-    APIABLE, NATIVE
+    APIABLE, COGNITO, NATIVE
 }
 data class Authz (
     val server: AuthServerType ,
     val types: List<AuthType>,
+    val roleArn: String? = null,
+    val region: String? = null,
+    val userPoolId: String? = null
 )
 
 interface Conf {
