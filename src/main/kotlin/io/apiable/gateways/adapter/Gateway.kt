@@ -271,6 +271,7 @@ interface AuthGateway {
     }
 
     fun isAuthZApiable(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.APIABLE.name)
+    fun isAuthZCognito(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.COGNITO.name)
     fun isAuthZNative(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.NATIVE.name)
 }
 
