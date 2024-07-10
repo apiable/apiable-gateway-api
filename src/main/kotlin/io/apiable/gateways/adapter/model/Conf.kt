@@ -48,6 +48,7 @@ interface Conf {
 
 interface AmazonConf: Conf {
     var region: String
+    var account: String?
 }
 
 data class AmazonBasicConf(
@@ -55,7 +56,8 @@ data class AmazonBasicConf(
     override var authz: Authz,
     override var region: String,
     var key: String,
-    var secret: String
+    var secret: String,
+    override var account: String? = null
 ) : AmazonConf
 
 
@@ -78,7 +80,8 @@ data class AmazonRoleArnConf(
     override var id: String,
     override var authz: Authz,
     override var region: String,
-    val roleArn: String // assume role arn
+    val roleArn: String, // assume role arn,
+    override var account: String? = null
 ) : AmazonConf
 
 data class ApigeeJsonKeyConf(
