@@ -36,14 +36,20 @@ enum class AuthServerType {
 }
 
 data class Authz (
-    val server: AuthServerType ,
+    val server: AuthServerType,
     val types: List<AuthType>,
-    val roleArn: String? = null,
-    val region: String? = null,
-    val userPoolId: String? = null,
-    val clientId: String? = null,
-    val clientSecret: String? = null,
+    val authServer: AuthzServer? = null,
 )
+
+interface AuthzServer
+
+data class CognitoAuthzServer (
+    val roleArn: String,
+    val region: String,
+    val userPoolId: String,
+    val clientId: String,
+    val clientSecret: String
+): AuthzServer
 
 interface Conf {
     var id: String
