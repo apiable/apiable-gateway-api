@@ -30,15 +30,19 @@ enum class AuthType {
     ADVANCED_CODE_FLOW,
     EVOLVED_CENTRALIZED_CLAIMS
 }
+
 enum class AuthServerType {
     APIABLE, COGNITO, NATIVE
 }
+
 data class Authz (
     val server: AuthServerType ,
     val types: List<AuthType>,
     val roleArn: String? = null,
     val region: String? = null,
-    val userPoolId: String? = null
+    val userPoolId: String? = null,
+    val clientId: String? = null,
+    val clientSecret: String? = null,
 )
 
 interface Conf {
