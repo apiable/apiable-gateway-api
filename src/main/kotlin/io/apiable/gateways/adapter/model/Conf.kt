@@ -35,21 +35,21 @@ enum class AuthServerType {
     APIABLE, COGNITO, NATIVE
 }
 
-data class Authz (
-    val server: AuthServerType,
-    val types: List<AuthType>,
-    val authServer: AuthzServer? = null,
-)
-
-interface AuthzServer
+interface Authz {
+    val type: AuthServerType
+    val supportedAuthTypes: List<AuthType>
+}
 
 data class CognitoAuthzServer (
     val roleArn: String,
     val region: String,
     val userPoolId: String,
     val clientId: String,
-    val clientSecret: String
-): AuthzServer
+    val clientSecret: String,
+    override val supportedAuthTypes: List<AuthType>,
+    override val type: AuthServerType = AuthServerType.COGNITO
+): Authz
+
 
 interface Conf {
     var id: String
