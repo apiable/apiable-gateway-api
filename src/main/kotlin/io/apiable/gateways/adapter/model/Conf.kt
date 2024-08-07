@@ -50,6 +50,15 @@ data class CognitoAuthzServer (
     override val type: AuthServerType = AuthServerType.COGNITO
 ): Authz
 
+data class NativeAuthzServer (
+    override val supportedAuthTypes: List<AuthType>,
+    override val type: AuthServerType = AuthServerType.NATIVE
+): Authz
+
+data class ApiableAuthzServer (
+    override val supportedAuthTypes: List<AuthType>,
+    override val type: AuthServerType = AuthServerType.APIABLE
+): Authz
 
 interface Conf {
     var id: String
