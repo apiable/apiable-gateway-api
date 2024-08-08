@@ -270,9 +270,9 @@ interface AuthGateway {
         return createAuth(conf, auth.create)
     }
 
-    fun isAuthZApiable(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.APIABLE.name)
-    fun isAuthZCognito(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.COGNITO.name)
-    fun isAuthZNative(conf: Conf) = conf.authz.server.name.startsWith(AuthServerType.NATIVE.name)
+    fun isAuthZApiable(conf: Conf) = conf.authz.type.name.startsWith(AuthServerType.APIABLE.name)
+    fun isAuthZCognito(conf: Conf) = conf.authz.type.name.startsWith(AuthServerType.COGNITO.name)
+    fun isAuthZNative(conf: Conf) = conf.authz.type.name.startsWith(AuthServerType.NATIVE.name)
 }
 
 interface Gateway: ApiGateway, AuthGateway
