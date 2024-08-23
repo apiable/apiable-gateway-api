@@ -50,7 +50,8 @@ data class AmazonApi(
     override var url: String,
     override var resources: List<Resource>? = emptyList(),
     var stage: String,
-    var environmentId: String? = null
+    var environmentId: String? = null,
+    var compatibleWithGatewayAuthz: Boolean = true
 ) : Api
 
 data class KongApi(
