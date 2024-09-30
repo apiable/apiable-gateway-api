@@ -66,32 +66,6 @@ data class AuthBasicApiKeyRevoke(
     override var id: String = integrationId
 ) : AuthRevoke
 
-data class AuthIntermediatePreGenerateToken(
-    override var id: String,
-    override var integrationId: String,
-    val appendToToken: Map<String,String>? = null,
-    val token: String
-) : Auth
-
-data class AuthIntermediatePreGenerateTokenRead(
-    override var integrationId: String,
-    override var id: String = integrationId
-) : AuthRead
-
-data class AuthIntermediatePreGenerateTokenCreate(
-    override var id: String,
-    override var integrationId: String,
-    override val plan: Plan,
-    override val attributes: Map<String,String> = emptyMap(),
-    override var appendToToken: Map<String,String>? = null
-) : AuthClientCreate, AuthUpdate
-
-data class AuthIntermediatePreGenerateTokenRevoke(
-    override var integrationId: String,
-    override var id: String = integrationId,
-    val token: String
-) : AuthRevoke
-
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/client-credentials-flow?context=linkedin%2Fcontext
 data class AuthIntermediateClientCredential(
     override var id: String,
@@ -186,5 +160,27 @@ data class AuthAdvancedCodeFlowRevoke(
     override var registrationClientUri: String
 ) : AuthClientRevoke
 
+data class AuthIntermediateJWT(
+    override var id: String,
+    override var integrationId: String,
+    val key: String,
+    val key2: String? = null
+) : Auth
 
+data class AuthIntermediateJWTRead(
+    override var integrationId: String,
+    override var id: String = integrationId
+) : AuthRead
 
+data class AuthIntermediateJWTCreate(
+    override var id: String,
+    override var integrationId: String,
+    override val plan: Plan,
+    override val attributes: Map<String,String> = emptyMap(),
+    val key: String? = null,
+) : AuthCreate, AuthUpdate
+
+data class AuthIntermediateJWTRevoke(
+    override var integrationId: String,
+    override var id: String = integrationId
+) : AuthRevoke

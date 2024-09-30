@@ -25,6 +25,7 @@ Level 3 - Evolved - Mobile and Web Client - Centralized Claims
 */
 enum class AuthType {
     BASIC_API_KEY,
+    JWT,
     INTERMEDIATE_PRE_GENERATE_TOKEN,
     INTERMEDIATE_CLIENT_CREDENTIAL,
     ADVANCED_CODE_FLOW,
