@@ -163,8 +163,8 @@ data class AuthAdvancedCodeFlowRevoke(
 data class AuthIntermediateJWT(
     override var id: String,
     override var integrationId: String,
-    val key: String,
-    val key2: String? = null
+    var clientId: String,
+    var clientSecret: String
 ) : Auth
 
 data class AuthIntermediateJWTRead(
@@ -177,7 +177,6 @@ data class AuthIntermediateJWTCreate(
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
-    val key: String? = null,
 ) : AuthCreate, AuthUpdate
 
 data class AuthIntermediateJWTRevoke(
