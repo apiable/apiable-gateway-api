@@ -18,14 +18,14 @@ package io.apiable.gateways.adapter.model
 /*
 Auth Type description
 Level 0 - Basic Auth - API Key
-Level 1 - Intermediate - Server to Server - Pre-generated Token
+Level 1 - Intermediate - Server to Server - JWT
 Level 1 - Intermediate - Server to Server - OAuth 2.0: Client Credentials
 Level 2 - Advanced - Mobile and Web Client - OAuth 2.0: Code Flow
 Level 3 - Evolved - Mobile and Web Client - Centralized Claims
 */
 enum class AuthType {
     BASIC_API_KEY,
-    INTERMEDIATE_PRE_GENERATE_TOKEN,
+    INTERMEDIATE_JWT,
     INTERMEDIATE_CLIENT_CREDENTIAL,
     ADVANCED_CODE_FLOW,
     EVOLVED_CENTRALIZED_CLAIMS
