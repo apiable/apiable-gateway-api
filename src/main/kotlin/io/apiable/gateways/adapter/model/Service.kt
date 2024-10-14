@@ -47,7 +47,8 @@ data class KongService(
     override var integrationId: String,
     override var name: String,
     override var url: String,
-    override var apis: List<Api>? = null
+    override var apis: List<Api>? = null,
+    var compatibleWithGatewayAuthz: Boolean = true
 ) : Service
 
 data class ApigeeService(
