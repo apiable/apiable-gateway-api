@@ -60,6 +60,7 @@ data class KongApi(
     override var name: String,
     override var url: String,
     override var resources: List<Resource>? = emptyList(),
+    var compatibleWithGatewayAuthz: Boolean = true
 ) : Api
 
 data class ApigeeApi(
