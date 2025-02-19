@@ -75,12 +75,47 @@ data class AuthIntermediateClientCredential(
     var registrationClientUri: String,
     var redirectUri: String,
     val appendToToken: Map<String,String>? = null,
-    var examples: CalloutExamples? = null
-) : Auth
+    var examples: CalloutExamples? = null,
+    var enabled: Boolean? = true
+) : Auth {
+    fun appendExamples(url: String, clientId: String) = AuthIntermediateClientCredential(
+        id = id,
+        integrationId = integrationId,
+        clientId = clientId,
+        clientSecret = clientSecret,
+        registrationClientUri = registrationClientUri,
+        redirectUri = redirectUri,
+        appendToToken = appendToToken,
+        enabled = enabled,
+        examples = CalloutExamples(
+            curl = """
+                    ### Retrieve ID Token
+                    ```
+                    curl --request POST \
+                         --url "$url" \
+                         --header 'content-type: application/x-www-form-urlencoded' \
+                         --data grant_type="client_credentials" \
+                         --data client_id="$clientId" \
+                         --data-urlencode client_secret="${'$'}CLIENT_SECRET" 
+                    ```
+                    ### Refresh ID Token
+                    ```
+                    curl --request POST \
+                         --url "$url" \
+                         --header 'content-type: application/x-www-form-urlencoded' \
+                         --data grant_type="refresh_token" \
+                         --data client_id="$clientId" \
+                         --data refresh_token="${'$'}REFRESH_TOKEN"
+                    ```
+                """.trimIndent()
+        )
+    )
+    }
 
 data class AuthIntermediateClientCredentialRead(
     override var integrationId: String,
-    override var id: String = integrationId
+    override var id: String = integrationId,
+    var redirectUri: String? = null
 ) : AuthRead
 
 data class AuthIntermediateClientCredentialCreate(
@@ -102,6 +137,7 @@ data class AuthIntermediateClientCredentialUpdate(
     var registrationClientUri: String,
     override var examples: CalloutExamples? = null,
     override var appendToToken: Map<String,String>? = null,
+    var enabled: Boolean? = true
 ) : AuthClientUpdate
 
 data class AuthIntermediateClientCredentialRevoke(
