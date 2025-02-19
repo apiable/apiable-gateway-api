@@ -32,7 +32,7 @@ enum class AuthType {
 }
 
 enum class AuthServerType {
-    APIABLE, COGNITO, NATIVE
+    APIABLE, COGNITO, NATIVE, CUSTOM_PH
 }
 
 interface Authz {
@@ -58,6 +58,14 @@ data class NativeAuthzServer (
 data class ApiableAuthzServer (
     override val supportedAuthTypes: List<AuthType>,
     override val type: AuthServerType = AuthServerType.APIABLE
+): Authz
+
+data class CustomPHAuthzServer (
+    val url: String,
+    val clientId: String,
+    val clientSecret: String,
+    override val supportedAuthTypes: List<AuthType>,
+    override val type: AuthServerType = AuthServerType.CUSTOM_PH
 ): Authz
 
 interface Conf {
