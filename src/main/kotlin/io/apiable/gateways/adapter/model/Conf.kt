@@ -64,6 +64,8 @@ data class CustomPHAuthzServer (
     val url: String,
     val clientId: String,
     val clientSecret: String,
+    val tokenUrl: String,
+    val authorizeUrl: String,
     override val supportedAuthTypes: List<AuthType>,
     override val type: AuthServerType = AuthServerType.CUSTOM_PH
 ): Authz
