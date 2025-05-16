@@ -20,10 +20,12 @@ interface AuthRead: Auth
 interface AuthCreate: Auth {
     val plan: Plan
     val attributes: Map<String, Any>
+    val lastPlan: Plan?
 }
 interface AuthUpdate: Auth {
     val plan: Plan
     val attributes: Map<String, Any>
+    val lastPlan: Plan?
 }
 interface AuthRevoke: Auth
 data class AuthRefresh (val revoke: AuthRevoke, val create: AuthCreate)
@@ -57,6 +59,7 @@ data class AuthBasicApiKeyCreate(
     override var integrationId: String,
     override val plan: Plan,
     override val attributes: Map<String,String> = emptyMap(),
+    override val lastPlan: Plan? = null,
     val key: String? = null,
     val key2: String? = null
 ) : AuthCreate, AuthUpdate
@@ -122,9 +125,10 @@ data class AuthIntermediateClientCredentialCreate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
+    override val lastPlan: Plan? = null,
     override val attributes: Map<String,String> = emptyMap(),
     var redirectUri: String,
-    override var appendToToken: Map<String,String>? = null
+    override var appendToToken: Map<String,String>? = null,
 ) : AuthClientCreate
 
 data class AuthIntermediateClientCredentialUpdate(
@@ -137,7 +141,8 @@ data class AuthIntermediateClientCredentialUpdate(
     var registrationClientUri: String,
     override var examples: CalloutExamples? = null,
     override var appendToToken: Map<String,String>? = null,
-    var enabled: Boolean? = true
+    var enabled: Boolean? = true,
+    override val lastPlan: Plan? = null,
 ) : AuthClientUpdate
 
 data class AuthIntermediateClientCredentialRevoke(
@@ -169,6 +174,7 @@ data class AuthAdvancedCodeFlowCreate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
+    override val lastPlan: Plan? = null,
     override val attributes: Map<String,String> = emptyMap(),
     var redirectUris: List<String>,
     var allowedOrigins: List<String> = emptyList(),
@@ -180,6 +186,7 @@ data class AuthAdvancedCodeFlowUpdate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
+    override val lastPlan: Plan? = null,
     override val attributes: Map<String, Any>,
     var clientId: String,
     var redirectUris: List<String>,
@@ -212,6 +219,7 @@ data class AuthIntermediateJWTCreate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
+    override val lastPlan: Plan? = null,
     override val attributes: Map<String,String> = emptyMap(),
 ) : AuthCreate, AuthUpdate
 
