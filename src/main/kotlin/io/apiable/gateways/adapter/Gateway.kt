@@ -264,11 +264,20 @@ interface AuthGateway {
      * */
     fun readAuth(conf: Conf, auth: AuthRead): Auth
 
-
     fun refreshAuth(conf: Conf, auth: AuthRefresh): Auth {
         revokeAuth(conf, auth.revoke)
         return createAuth(conf, auth.create)
     }
+
+    /** Disables the auth from making further calls in way that it can be enabled later. E.g Temporary block.
+     *
+     */
+    fun disableAuth(conf: Conf, authIntegrationId: String)
+
+    /** Enables the auth after it has been disabled earlier.
+     *
+     */
+    fun enableAuth(conf: Conf, authIntegrationId: String)
 
     fun isAuthZApiable(conf: Conf) = conf.authz.type.name.startsWith(AuthServerType.APIABLE.name)
     fun isAuthZCognito(conf: Conf) = conf.authz.type.name.startsWith(AuthServerType.COGNITO.name)
