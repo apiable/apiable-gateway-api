@@ -148,6 +148,8 @@ interface ApiGateway {
     fun validateExistsOnGateway(conf: Conf, plan: Plan): Map<String,String>
 
     fun searchApiKeys(conf: Conf, nameQuery: String, pageSize: Int, position: String?): APIKeySearch
+    fun setAPIKeyStatus(conf: Conf, apiKeyIntegrationId: String, enabled: Boolean): Boolean
+    fun deleteAPIKey(conf: Conf, apiKeyIntegrationId: String): Boolean
 
 }
 
