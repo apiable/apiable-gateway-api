@@ -147,6 +147,8 @@ interface ApiGateway {
      */
     fun validateExistsOnGateway(conf: Conf, plan: Plan): Map<String,String>
 
+    fun searchApiKeys(conf: Conf, nameQuery: String, pageSize: Int, position: String?): APIKeySearch
+
 }
 
 interface AuthGateway {

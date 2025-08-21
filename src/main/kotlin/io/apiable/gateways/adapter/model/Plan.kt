@@ -1,5 +1,8 @@
 package io.apiable.gateways.adapter.model
 
+import java.util.Optional
+import javax.swing.text.Position
+
 /**
  * Apiable Oy
  * http://www.apiable.io/
@@ -43,3 +46,17 @@ data class PlanUpdate(
     var enableUsageEvents: Boolean ? = null
 ): IPlan
 
+data class APIKeyItem(
+    override var id: String,
+    override var integrationId: String,
+    val name: String,
+    val status: Boolean,
+    val created: Long,
+    val description: String? = "",
+): Integratable
+
+data class APIKeySearch(
+    val keys: List<APIKeyItem>,
+    val position: String?,
+    val pageSize: Int,
+)
