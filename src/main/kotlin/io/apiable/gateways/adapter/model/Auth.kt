@@ -121,7 +121,8 @@ data class AuthIntermediateClientCredential(
 data class AuthIntermediateClientCredentialRead(
     override var integrationId: String,
     override var id: String = integrationId,
-    var redirectUri: String? = null
+    var redirectUri: String? = null,
+    var clientId: String? = null
 ) : AuthRead
 
 data class AuthIntermediateClientCredentialCreate(
