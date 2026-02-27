@@ -190,6 +190,20 @@ interface AuthGateway {
      * */
 
     fun createAuth(conf: Conf, auth: AuthCreate): Auth
+
+    /**
+     * Rotate the Secret / API Key
+     *
+     * AuthType.BASIC_API_KEY
+     * Generates a new API key, replacing the existing one.
+     * Callout to:
+     *    AWS: java-client: deleteKey/createKey
+     *
+     * AuthType.INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * Rotates the OAuth2 client secret for the existing client application.
+     * */
+    fun rotateSecret(conf: Conf, auth: AuthCreate): Auth
+
     /**
      *
      * AuthType.BASIC_API_KEY
