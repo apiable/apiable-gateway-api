@@ -1,8 +1,8 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 /**
  * Provider-agnostic scope binding adapter.
- * Implementations live per provider in portal-backend under gateways/adapter/{provider}/.
+ * Implementations live per provider in portal-backend under authserver/adapter/{provider}/.
  *
  * Called by:
  * - Scope grant lifecycle (Epic 5) for bind/unbind on approval/revocation

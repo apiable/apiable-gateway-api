@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 enum class DcrErrorCode {
     NETWORK,         // connection refused, DNS failure, SSL handshake

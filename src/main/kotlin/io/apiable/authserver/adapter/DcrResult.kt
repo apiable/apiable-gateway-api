@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 sealed class DcrResult {
     data class Success(val registration: DcrClientRegistration) : DcrResult()

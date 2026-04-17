@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 data class ProviderScope(
     val name: String,

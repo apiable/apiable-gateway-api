@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 /**
  * Client metadata for DCR register/update calls. Field names mirror RFC 7591.

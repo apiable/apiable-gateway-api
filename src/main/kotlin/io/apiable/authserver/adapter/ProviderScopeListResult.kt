@@ -1,4 +1,4 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 sealed class ProviderScopeListResult {
     data class Success(val scopes: List<ProviderScope>) : ProviderScopeListResult()

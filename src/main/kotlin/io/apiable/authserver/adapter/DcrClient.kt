@@ -1,9 +1,9 @@
-package io.apiable.gateways.adapter
+package io.apiable.authserver.adapter
 
 /**
  * Provider-agnostic Dynamic Client Registration client (RFC 7591 / RFC 7592).
  *
- * Implementations live per provider in portal-backend under gateways/adapter/{provider}/.
+ * Implementations live per provider in portal-backend under authserver/adapter/{provider}/.
  * Callers always obtain an instance via DcrClientFactory — never reference implementation
  * classes directly (AR4).
  *
