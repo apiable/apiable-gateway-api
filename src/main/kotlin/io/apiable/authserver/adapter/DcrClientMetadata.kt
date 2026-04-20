@@ -1,7 +1,12 @@
 package io.apiable.authserver.adapter
 
 /**
- * Client metadata for DCR register/update calls. Field names mirror RFC 7591.
+ * Kotlin-domain model for DCR register/update metadata (RFC 7591 §2).
+ *
+ * Property names follow Kotlin conventions (camelCase). Implementations are responsible
+ * for serialising each field to its RFC 7591 snake_case wire name (e.g. [clientName] →
+ * `client_name`, [grantTypes] → `grant_types`). [scope] is modelled as a list for
+ * convenience; the spec defines it as a single space-delimited string on the wire.
  */
 data class DcrClientMetadata(
     val clientName: String,
