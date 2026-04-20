@@ -3,11 +3,8 @@ package io.apiable.authserver.adapter
 /**
  * Provider-agnostic Dynamic Client Registration client (RFC 7591 / RFC 7592).
  *
- * Implementations live per provider in portal-backend under authserver/adapter/{provider}/.
- * Callers always obtain an instance via DcrClientFactory — never reference implementation
- * classes directly (AR4).
- *
- * Every method returns [DcrResult]. No raw exceptions escape the adapter boundary (AR5).
+ * Every method returns [DcrResult], so callers should handle outcomes through the result type
+ * rather than relying on provider-specific implementation details.
  *
  * @param integrationId String representation of the AuthzIntegration ObjectId.
  */

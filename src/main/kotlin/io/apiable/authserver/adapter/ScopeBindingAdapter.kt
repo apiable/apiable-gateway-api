@@ -2,14 +2,14 @@ package io.apiable.authserver.adapter
 
 /**
  * Provider-agnostic scope binding adapter.
- * Implementations live per provider in portal-backend under authserver/adapter/{provider}/.
  *
- * Called by:
- * - Scope grant lifecycle (Epic 5) for bind/unbind on approval/revocation
- * - Bulk scope import (Epic 2 Story 2.1) for readAllProviderScopes
+ * Implementations are discovered and invoked through this interface; callers should depend on
+ * the contract defined here rather than any provider-specific implementation details.
  *
- * Every method returns [ScopeBindingResult] or [ProviderScopeListResult]. No raw exceptions
- * escape the adapter boundary (AR5).
+ * Every method reports success or failure via [ScopeBindingResult] or
+ * [ProviderScopeListResult]. Implementations should convert operational failures into those
+ * result types instead of allowing exceptions to propagate to callers. A result may still retain
+ * an underlying [Throwable] as diagnostic context.
  *
  * @param integrationId String representation of the AuthzIntegration ObjectId.
  */
