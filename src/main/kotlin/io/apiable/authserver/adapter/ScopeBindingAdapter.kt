@@ -37,4 +37,11 @@ interface ScopeBindingAdapter {
      * Used by Epic 2 Story 2.1 "Sync from Auth Server" bulk import.
      */
     fun readAllProviderScopes(integrationId: String): ProviderScopeListResult
+
+    /**
+     * Check whether a client with the given OAuth2 clientId is registered with the provider.
+     * Returns [ClientExistsResult.Found] if present, [ClientExistsResult.NotFound] if absent,
+     * or [ClientExistsResult.Error] if the check itself could not complete (auth/network failure).
+     */
+    fun clientExists(integrationId: String, clientId: String): ClientExistsResult
 }
