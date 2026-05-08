@@ -6,8 +6,8 @@ package io.apiable.authserver.adapter
  * Implementations are discovered and invoked through this interface; callers should depend on
  * the contract defined here rather than any provider-specific implementation details.
  *
- * Every method reports success or failure via [ScopeBindingResult] or
- * [ProviderScopeListResult]. Implementations should convert operational failures into those
+ * Every method reports success or failure via [ScopeBindingResult], [ProviderScopeListResult],
+ * or [ClientExistsResult]. Implementations should convert operational failures into those
  * result types instead of allowing exceptions to propagate to callers. A result may still retain
  * an underlying [Throwable] as diagnostic context.
  *
@@ -37,4 +37,11 @@ interface ScopeBindingAdapter {
      * Used by Epic 2 Story 2.1 "Sync from Auth Server" bulk import.
      */
     fun readAllProviderScopes(integrationId: String): ProviderScopeListResult
+
+    /**
+     * Check whether a client with the given OAuth2 clientId is registered with the provider.
+     * Returns [ClientExistsResult.Found] if present, [ClientExistsResult.NotFound] if absent,
+     * or [ClientExistsResult.Error] if the check itself could not complete (auth/network failure).
+     */
+    fun clientExists(integrationId: String, clientId: String): ClientExistsResult
 }
