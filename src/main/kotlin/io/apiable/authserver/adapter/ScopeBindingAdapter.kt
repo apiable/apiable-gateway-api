@@ -6,8 +6,8 @@ package io.apiable.authserver.adapter
  * Implementations are discovered and invoked through this interface; callers should depend on
  * the contract defined here rather than any provider-specific implementation details.
  *
- * Every method reports success or failure via [ScopeBindingResult] or
- * [ProviderScopeListResult]. Implementations should convert operational failures into those
+ * Every method reports success or failure via [ScopeBindingResult], [ProviderScopeListResult],
+ * or [ClientExistsResult]. Implementations should convert operational failures into those
  * result types instead of allowing exceptions to propagate to callers. A result may still retain
  * an underlying [Throwable] as diagnostic context.
  *
