@@ -24,9 +24,10 @@ Level 2 - Advanced - Mobile and Web Client - OAuth 2.0: Code Flow
 Level 3 - Evolved - Mobile and Web Client - Centralized Claims
 */
 enum class AuthType {
-    BASIC_API_KEY,
+    API_KEY,
     INTERMEDIATE_JWT,
-    INTERMEDIATE_CLIENT_CREDENTIAL,
+    CLIENT_SECRET_BASIC,
+    PRIVATE_KEY_JWT,
     ADVANCED_CODE_FLOW,
     EVOLVED_CENTRALIZED_CLAIMS
 }
