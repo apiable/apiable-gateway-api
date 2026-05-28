@@ -44,19 +44,19 @@ interface AuthClientRevoke: AuthRevoke {
 
 data class CalloutExamples(val curl: String)
 
-data class AuthBasicApiKey(
+data class AuthApiKey(
     override var id: String,
     override var integrationId: String,
     val key: String,
     val key2: String? = null
 ) : Auth
 
-data class AuthBasicApiKeyRead(
+data class AuthApiKeyRead(
     override var integrationId: String,
     override var id: String = integrationId
 ) : AuthRead
 
-data class AuthBasicApiKeyCreate(
+data class AuthApiKeyCreate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
@@ -67,13 +67,13 @@ data class AuthBasicApiKeyCreate(
     val key2: String? = null
 ) : AuthCreate, AuthUpdate
 
-data class AuthBasicApiKeyRevoke(
+data class AuthApiKeyRevoke(
     override var integrationId: String,
     override var id: String = integrationId
 ) : AuthRevoke
 
 // https://learn.microsoft.com/en-us/linkedin/shared/authentication/client-credentials-flow?context=linkedin%2Fcontext
-data class AuthIntermediateClientCredential(
+data class AuthClientSecretBasic(
     override var id: String,
     override var integrationId: String,
     var clientId: String,
@@ -84,7 +84,7 @@ data class AuthIntermediateClientCredential(
     var examples: CalloutExamples? = null,
     var enabled: Boolean? = true
 ) : Auth {
-    fun appendExamples(url: String, clientId: String) = AuthIntermediateClientCredential(
+    fun appendExamples(url: String, clientId: String) = AuthClientSecretBasic(
         id = id,
         integrationId = integrationId,
         clientId = clientId,
@@ -118,14 +118,14 @@ data class AuthIntermediateClientCredential(
     )
     }
 
-data class AuthIntermediateClientCredentialRead(
+data class AuthClientSecretBasicRead(
     override var integrationId: String,
     override var id: String = integrationId,
     var redirectUri: String? = null,
     var clientId: String? = null
 ) : AuthRead
 
-data class AuthIntermediateClientCredentialCreate(
+data class AuthClientSecretBasicCreate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
@@ -136,7 +136,7 @@ data class AuthIntermediateClientCredentialCreate(
     override var appendToToken: Map<String,String>? = null,
 ) : AuthClientCreate
 
-data class AuthIntermediateClientCredentialUpdate(
+data class AuthClientSecretBasicUpdate(
     override var id: String,
     override var integrationId: String,
     override val plan: Plan,
@@ -151,7 +151,7 @@ data class AuthIntermediateClientCredentialUpdate(
     override val lastAuth: Auth? = null,
 ) : AuthClientUpdate
 
-data class AuthIntermediateClientCredentialRevoke(
+data class AuthClientSecretBasicRevoke(
     override var integrationId: String,
     override var id: String = integrationId,
     override var registrationClientUri: String

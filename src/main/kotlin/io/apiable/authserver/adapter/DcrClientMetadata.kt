@@ -16,4 +16,9 @@ data class DcrClientMetadata(
     val redirectUris: List<String> = emptyList(),
     /** Provider-specific fields serialised alongside standard fields in the request body. */
     val providerExtras: Map<String, Any> = emptyMap(),
+    /**
+     * RFC 7591 §2 `jwks_uri`. Populated when [tokenEndpointAuthMethod] is `private_key_jwt`
+     * so the auth provider knows which JWKS to verify signed client assertions against.
+     */
+    val jwksUri: String? = null,
 )

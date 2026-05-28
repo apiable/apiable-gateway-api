@@ -157,7 +157,7 @@ interface AuthGateway {
     /**
      * Create a Key
      *
-     * AuthType.BASIC_API_KEY
+     * AuthType.API_KEY
      * Callout to:
      *    AWS: java-client: createKeyForUsagePlan
      *    Kong:
@@ -177,7 +177,7 @@ interface AuthGateway {
      *       PUT https://management.azure.com$url/subscriptions/${subscription.id}?api-version=${conf.version}&appType=portal
      *
      *
-     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, CLIENT_SECRET_BASIC, ADVANCED_CODE_FLOW
      * Callout to:
      *    AWS: not supported: Can be combined with the Apiable Auth Platform - Curity
      *    Kong:
@@ -194,19 +194,19 @@ interface AuthGateway {
     /**
      * Rotate the Secret / API Key
      *
-     * AuthType.BASIC_API_KEY
+     * AuthType.API_KEY
      * Generates a new API key, replacing the existing one.
      * Callout to:
      *    AWS: java-client: deleteKey/createKey
      *
-     * AuthType.INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * AuthType.CLIENT_SECRET_BASIC, ADVANCED_CODE_FLOW
      * Rotates the OAuth2 client secret for the existing client application.
      * */
     fun rotateSecret(conf: Conf, auth: AuthCreate): Auth
 
     /**
      *
-     * AuthType.BASIC_API_KEY
+     * AuthType.API_KEY
      *
      * Callout to:
      *    AWS: java-client: deleteKey/createKey
@@ -230,7 +230,7 @@ interface AuthGateway {
      *
      *
      *
-     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, CLIENT_SECRET_BASIC, ADVANCED_CODE_FLOW
      *
      * Updates a Client on a Gateway
      *
@@ -247,14 +247,14 @@ interface AuthGateway {
 
     /**
      * Revoke the Key
-     * AuthType.BASIC_API_KEY
+     * AuthType.API_KEY
      *
      * Callout to:
      *    AWS: java-client: deleteKey
      *    Kong: DELETE ${conf.url}/consumers/$username
      *    Azure: DELETE: https://management.azure.com${subscription.integrationId}?api-version=${conf.version}"
      *
-     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, CLIENT_SECRET_BASIC, ADVANCED_CODE_FLOW
      * Updates a Client on a Gateway
      *
      * Callout to:
@@ -268,7 +268,7 @@ interface AuthGateway {
 
     /**
      * Read the key
-     * AuthType.BASIC_API_KEY
+     * AuthType.API_KEY
      *
      * Callout to:
      *    AWS: java-client: getKeyForSubscription
@@ -277,7 +277,7 @@ interface AuthGateway {
      *
      *
      *
-     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, INTERMEDIATE_CLIENT_CREDENTIAL, ADVANCED_CODE_FLOW
+     * AuthType.INTERMEDIATE_PRE_GENERATE_TOKEN, CLIENT_SECRET_BASIC, ADVANCED_CODE_FLOW
      * Not implemented yet
      * */
     fun readAuth(conf: Conf, auth: AuthRead): Auth
