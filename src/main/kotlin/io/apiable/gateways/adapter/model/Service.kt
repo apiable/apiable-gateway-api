@@ -33,7 +33,8 @@ data class AmazonService(
     override var name: String,
     override var url: String,
     override var apis: List<Api>? = null,
-    var compatibleWithGatewayAuthz: Boolean = true
+    var compatibleWithGatewayAuthz: Boolean = true,
+    var apiKeySource: ApiKeySource = ApiKeySource.UNSPECIFIED
 ) : Service
 
 data class AzureService(

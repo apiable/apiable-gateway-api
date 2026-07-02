@@ -27,6 +27,19 @@ data class Resource(
     var integrationId: String
 )
 
+/**
+ * Amazon API Gateway REST API `apiKeySource` — where the API key is expected
+ * to be provided (e.g. via the `x-api-key` header or via a custom authorizer).
+ *
+ * Mirrors the AWS SDK's `ApiKeySourceType` without adding an AWS SDK dependency
+ * to this module.
+ */
+enum class ApiKeySource {
+    HEADER,
+    AUTHORIZER,
+    UNSPECIFIED
+}
+
 interface Api{
     var integrationId: String
     var serviceIntegrationId: String
@@ -51,7 +64,8 @@ data class AmazonApi(
     override var resources: List<Resource>? = emptyList(),
     var stage: String,
     var environmentId: String? = null,
-    var compatibleWithGatewayAuthz: Boolean = true
+    var compatibleWithGatewayAuthz: Boolean = true,
+    var apiKeySource: ApiKeySource = ApiKeySource.UNSPECIFIED
 ) : Api
 
 data class KongApi(
