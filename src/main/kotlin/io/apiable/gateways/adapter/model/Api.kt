@@ -28,10 +28,11 @@ data class Resource(
 )
 
 /**
- * Amazon API Gateway's `apiKeySource` on a REST API — whether the method
- * expects the key via a `x-api-key` HEADER or a Lambda AUTHORIZER. Mirrors
- * AWS SDK's `ApiKeySourceType` without pulling the AWS SDK into this module;
- * `AmazonGatewayAdapter` maps the SDK enum onto this one.
+ * Amazon API Gateway REST API `apiKeySource` — where the API key is expected
+ * to be provided (e.g. via the `x-api-key` header or via a custom authorizer).
+ *
+ * Mirrors the AWS SDK's `ApiKeySourceType` without adding an AWS SDK dependency
+ * to this module.
  */
 enum class ApiKeySource {
     HEADER,
