@@ -24,18 +24,16 @@ sealed class WriteScopesResult {
         val deletedCount: Int,
         val conflictCount: Int,
         val errors: List<WriteScopeError> = emptyList(),
-    ) : WriteScopesResult() {
-        override val kind: String = "Success"
-    }
+        override val kind: String = "Success",
+    ) : WriteScopesResult()
 
     data class Error(
         val code: ScopeBindingErrorCode,
         val message: String,
         val cause: Throwable? = null,
         val providerContext: Map<String, Any> = emptyMap(),
-    ) : WriteScopesResult() {
-        override val kind: String = "Error"
-    }
+        override val kind: String = "Error",
+    ) : WriteScopesResult()
 }
 
 /**
